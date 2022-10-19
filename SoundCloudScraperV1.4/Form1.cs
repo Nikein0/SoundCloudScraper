@@ -14,7 +14,8 @@ namespace SoundCloudScraperV1._4
 {
     public partial class Form1 : Form
     {
-        public SoundCloudClient soundcloud = new SoundCloudClient();
+        private SoundCloudClient soundcloud = new SoundCloudClient();
+        private string linktext = "https://soundcloud.com/";
         public Form1()
         {
             InitializeComponent();
@@ -29,13 +30,20 @@ namespace SoundCloudScraperV1._4
         {
             SongInfo songinfo = new SongInfo();
             var stopwatch = new Stopwatch();
-            var track = await soundcloud.Tracks.GetAsync(TxtURL.Text);
-            guna2TextBox2.Text = $@"{songinfo.GetName(track.Title, track.User.Username)}   {songinfo.GetDuration(track.Duration)}   ";
-            stopwatch.Start();
-            await soundcloud.DownloadAsync(track, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + $@"\Downloads\{track.User.Username} - {track.Title}.mp3");
-            stopwatch.Stop();
-            TimeSpan timespan = stopwatch.Elapsed;
-            guna2TextBox2.Text += $@"{timespan.Minutes}:{timespan.Seconds}:{timespan.Milliseconds}";
+            if (TxtURL.Text.Contains(linktext) == true)
+            {
+                var track = await soundcloud.Tracks.GetAsync(TxtURL.Text);
+                guna2TextBox2.Text = $@"{songinfo.GetName(track.Title, track.User.Username)}   {songinfo.GetDuration(track.Duration)}   ";
+                stopwatch.Start();
+                await soundcloud.DownloadAsync(track, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + $@"\Downloads\{track.User.Username} - {track.Title}.mp3");
+                stopwatch.Stop();
+                TimeSpan timespan = stopwatch.Elapsed;
+                guna2TextBox2.Text += $@"{timespan.Minutes}:{timespan.Seconds}:{timespan.Milliseconds}";
+            }
+            else
+            {
+                guna2TextBox2.Text = "Invalid link";
+            }
 
 
         }
