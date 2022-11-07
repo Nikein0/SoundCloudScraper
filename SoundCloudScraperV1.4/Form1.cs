@@ -19,11 +19,15 @@ namespace SoundCloudScraperV1._4
         public Form1()
         {
             InitializeComponent();
+            guna2PictureBox1.Visible = false;
+            guna2ProgressBar1.Visible = false;
+            guna2TextBox2.Visible = false;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            guna2ProgressBar1.Visible = false;
+            
+            
         }
 
         private async void guna2Button1_Click(object sender, EventArgs e)
@@ -33,12 +37,16 @@ namespace SoundCloudScraperV1._4
             if (TxtURL.Text.Contains(linktext) == true)
             {
                 var track = await soundcloud.Tracks.GetAsync(TxtURL.Text);
+                guna2TextBox2.Visible = true;
                 guna2TextBox2.Text = $@"{songinfo.GetName(track.Title, track.User.Username)}   {songinfo.GetDuration(track.Duration)}   ";
+                guna2PictureBox1.Visible = true;
+                guna2PictureBox1.Load(track.ArtworkUrl.ToString());
                 stopwatch.Start();
                 await soundcloud.DownloadAsync(track, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + $@"\Downloads\{track.User.Username} - {track.Title}.mp3");
                 stopwatch.Stop();
                 TimeSpan timespan = stopwatch.Elapsed;
                 guna2TextBox2.Text += $@"{timespan.Minutes}:{timespan.Seconds}:{timespan.Milliseconds}";
+                
             }
             else
             {
@@ -66,6 +74,11 @@ namespace SoundCloudScraperV1._4
         private async void guna2ProgressBar1_ValueChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void guna2PictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

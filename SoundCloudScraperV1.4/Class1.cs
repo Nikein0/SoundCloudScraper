@@ -37,6 +37,8 @@ namespace SoundCloudScraper
 
         
 
+        
+
         public string GetDuration(long? length)
         {
             long? seconds = length /1000;
